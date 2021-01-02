@@ -1,0 +1,23 @@
+{
+  "name": "tienda",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.14.0",
+    "bootstrap": "^4.5.2",
+    "bootstrap-select": "^1.13.18",
+    "ejs-electron": "^2.1.1",
+    "electron": "^10.1.1",
+    "electron-reload": "^1.5.0",
+    "jquery": "^3.5.1",
+    "pg": "^8.3.3",
+    "popper.js": "^1.16.1"
+  }
+}

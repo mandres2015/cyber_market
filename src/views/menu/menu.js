@@ -7,7 +7,9 @@ require("bootstrap");
 require("bootstrap-select");
 
 let providers;
-const IVA = 12;
+const IVA = 12,
+  ICE = 10,
+  IRBP = 0.02;
 
 function init() {
   $("select").selectpicker({
@@ -221,6 +223,8 @@ function saveNewProduct(e) {
   const category = document.querySelector("#newCatProd").selectedOptions[0]
     .value;
   const hasIVA = document.querySelector("#newIVAProd").checked;
+  const hasICE = document.querySelector("#newICEProd").checked;
+  const hasIRBP = document.querySelector("#newIRBPProd").checked;
   // const hasICE = document.querySelector('#newICEProd').checked
   const params = {
     code: code,
@@ -229,7 +233,8 @@ function saveNewProduct(e) {
     brand: brand,
     category: category,
     hasIVA: hasIVA,
-    // 'hasICE': hasICE
+    hasICE: hasICE,
+    hasIRBP: hasIRBP,
   };
 
   if (name.length > 0) {
@@ -277,6 +282,7 @@ function showProducts() {
 
 function fillProduct(e) {
   console.log(e);
+  console.log(products);
   const nodes = Array.from(e.target.closest("ul").children);
   const i = nodes.indexOf(e.target);
   clearProductFields();
@@ -286,6 +292,8 @@ function fillProduct(e) {
   const measure = document.querySelector("#measureProd");
   const brand = document.querySelector("#brandProd");
   const iva = document.querySelector("#IVA");
+  const ice = document.querySelector("#ICE");
+  const irbp = document.querySelector("#IRBP");
   id.value = products[i].id;
   id.className = "hover-focus";
   code.value = products[i].code;
@@ -297,6 +305,8 @@ function fillProduct(e) {
   brand.value = products[i].brand;
   brand.className = "hover-focus";
   iva.checked = products[i].iva;
+  ice.checked = products[i].ice;
+  irbp.checked = products[i].irbp;
   let productsList = document.querySelector("#productsList");
   productsList.innerHTML = "";
   searchProd.value = "";
@@ -497,6 +507,8 @@ function addProdToTable(e) {
     const qty = document.getElementById("qtyProd").value;
     const desc = document.getElementById("descProd").value;
     const iva = document.getElementById("IVA").checked;
+    const ice = document.getElementById("ICE").checked;
+    const irbp = document.getElementById("IRBP").checked;
     const subtotal = document.getElementById("subProd").value;
     const table = document.getElementById("tableProducts");
     let finalPrice = parseFloat(subtotal).toFixed(4);
@@ -504,13 +516,30 @@ function addProdToTable(e) {
     const subTable = (parseFloat(price) * qty).toFixed(4);
     const rowCount = table.getElementsByTagName("tbody")[0].childElementCount;
 
+    if (ice) {
+      finalPrice = Number((finalPrice * (ICE / 100 + 1)).toFixed(4));
+    }
     if (iva) {
-      finalPrice = (finalPrice * (IVA / 100 + 1)).toFixed(4);
+      finalPrice = Number((finalPrice * (IVA / 100 + 1)).toFixed(4));
+    }
+    if (irbp) {
+      finalPrice = Number((finalPrice + IRBP * qty).toFixed(4));
     }
 
     const unitPrice = (finalPrice / qty).toFixed(2);
 
-    const data = [id, name, qty, subTable, desc, iva, finalPrice, unitPrice];
+    const data = [
+      id,
+      name,
+      qty,
+      subTable,
+      desc,
+      iva,
+      ice,
+      irbp,
+      finalPrice,
+      unitPrice,
+    ];
 
     let row = table.getElementsByTagName("tbody")[0].insertRow(rowCount);
 
@@ -519,7 +548,7 @@ function addProdToTable(e) {
       let cell = row.insertCell(i);
       cell.className = "column-product";
       if (i == data.length) {
-        cell.innerHTML = `<input class="input-group" type="text" name="pvp-${rowCount}" id="pvp-${rowCount}">`;
+        cell.innerHTML = `<input class="input-group pvp" type="text" name="pvp-${rowCount}" id="pvp-${rowCount}">`;
       } else if (i == data.length + 1) {
         cell.innerHTML = `
         <div class="options">
@@ -530,8 +559,20 @@ function addProdToTable(e) {
             <i class="fas fa-trash-alt"></i>
           </a>
         </div>`;
-      } else if (i == 5) {
+      } else if (i == 6) {
         if (iva) {
+          cell.innerHTML = `<input class="input-group" type="checkbox" checked disabled>`;
+        } else {
+          cell.innerHTML = `<input class="input-group" type="checkbox" disabled>`;
+        }
+      } else if (i == 5) {
+        if (ice) {
+          cell.innerHTML = `<input class="input-group" type="checkbox" checked disabled>`;
+        } else {
+          cell.innerHTML = `<input class="input-group" type="checkbox" disabled>`;
+        }
+      } else if (i == 7) {
+        if (irbp) {
           cell.innerHTML = `<input class="input-group" type="checkbox" checked disabled>`;
         } else {
           cell.innerHTML = `<input class="input-group" type="checkbox" disabled>`;
@@ -580,28 +621,46 @@ function calculateTotals() {
     desCol = 4,
     ivaCol = 5;
   let subTotal = 0,
+    subIva = 0,
+    descIva = 0,
+    descNoIva = 0,
     desTotal = 0,
     ivaTotal = 0,
+    iceTotal = 0,
+    irbpTotal = 0,
     total = 0;
 
   for (let row = 1; row < n; ++row) {
     if (table.rows[row].cells.length > ivaCol) {
-      const sub = parseFloat(table.rows[row].cells[subCol].innerText);
-      subTotal += sub;
-      console.log(subTotal);
-      const desc = parseFloat(table.rows[row].cells[desCol].innerText);
+      const desc = Number(
+        parseFloat(table.rows[row].cells[desCol].innerText).toFixed(2)
+      );
       desTotal += desc;
       console.log(desTotal);
-      if (table.rows[row].cells[ivaCol].children[0].checked) {
-        ivaTotal += parseFloat((sub - desc) * (IVA / 100));
-      }
       console.log(ivaTotal);
+      const sub = Number(
+        parseFloat(table.rows[row].cells[subCol].innerText).toFixed(2)
+      );
+      if (table.rows[row].cells[ivaCol].children[0].checked) {
+        subIva += sub;
+        descIva += desc;
+        console.log(subIva);
+      } else {
+        subTotal += sub;
+        descNoIva += desc;
+        console.log(subTotal);
+      }
     }
   }
 
-  total += parseFloat(subTotal - desTotal + ivaTotal);
+  iceTotal = Number(parseFloat((subIva - descIva) * (IVA / 100)).toFixed(2));
+  ivaTotal = Number(parseFloat((subIva - descIva) * (IVA / 100)).toFixed(2));
+  irbpTotal = Number(parseFloat((subIva - descIva) * (IVA / 100)).toFixed(2));
+
+  total += parseFloat(subTotal - descNoIva + (subIva - descIva) + ivaTotal);
 
   document.getElementById("subTotal").value = subTotal.toFixed(2);
+  document.getElementById("subIva").value = subIva.toFixed(2);
   document.getElementById("DescTotal").value = desTotal.toFixed(2);
   document.getElementById("IvaTotal").value = ivaTotal.toFixed(2);
   document.getElementById("Total").value = total.toFixed(2);
@@ -626,8 +685,64 @@ function calculateTotals() {
 function deleteProduct(e) {
   let row = e.parentElement.parentElement.parentElement;
   document.getElementById("tableProducts").deleteRow(row.rowIndex);
+  calculateTotals();
 }
 
-function editProduct() {
-  
+function editProduct() {}
+
+const btnSave = document.getElementById("btnSavePurchase");
+btnSave.addEventListener("click", savePurchase);
+
+function savePurchase() {
+  let serieFac = document.getElementById("serieFac");
+  let numFac = document.getElementById("numFac");
+  let dateBuy = document.getElementById("dateBuy");
+  let idProv = document.getElementById("idProv");
+  let table = document.getElementById("tableProducts");
+  let subTotal = document.getElementById("subTotal");
+  let descTotal = document.getElementById("DescTotal");
+  let ivaTotal = document.getElementById("IvaTotal");
+  let total = document.getElementById("Total");
+
+  let data = {
+    serieFac: serieFac,
+    numFac: numFac,
+    dateBuy: dateBuy,
+    idProv: idProv,
+    subtotal: subTotal,
+    descTotal: descTotal,
+    ivaTotal: ivaTotal,
+    total: total,
+  };
+
+  let rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+  let products = [];
+
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i];
+
+    const values = row.getElementsByClassName("data-column");
+
+    console.log(values);
+
+    const id = values[0].innerHTML;
+    const qty = values[2].innerHTML;
+    const subtotal = values[3].innerHTML;
+    const discount = values[4].innerHTML;
+    const iva = values[0].innerHTML;
+    const pvp = ow.getElementsByClassName("pvp")[0].value;
+
+    const dataP = {
+      id: id,
+      price: subtotal,
+      qty: qty,
+      desc: discount,
+      iva: iva,
+      pvp: pvp,
+    };
+
+    products.push(dataP);
+  }
+
+  console.log(products);
 }

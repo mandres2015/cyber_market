@@ -249,7 +249,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="col-3">
+                    <div class="col-2">
                       <div class="input-container">
                         <input
                           id="brandProd"
@@ -260,63 +260,98 @@
                         <label for="brandProd">Marca</label>
                       </div>
                     </div>
-                    <div class="col-4">
+                    <div class="col-3">
                       <div class="row">
-                        <div class="col-4">
+                        <div class="col-6">
                           <div class="input-container">
                             <input id="percProd" name="percProd" type="text" />
                             <label for="percProd">% Desc</label>
                           </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-6">
                           <div class="input-container">
                             <input id="descProd" name="descProd" type="text" />
                             <label for="descProd">Descuento</label>
                           </div>
                         </div>
-                        <div class="col-4 d-flex">
+                      </div>
+                    </div>
+                    <div class="col-3">
+                      <div class="row">
+                        <div class="col-4">
                           <div class="form-check form-check-inline">
                             <input
                               id="IVA"
                               class="form-check-input"
                               type="checkbox"
-                              id="inlineCheckbox1"
                               value="IVA"
                               disabled
                             />
-                            <label
-                              class="form-check-label"
-                              for="inlineCheckbox1"
+                            <label class="form-check-label" for="IVA"
                               >IVA</label
+                            >
+                          </div>
+                        </div>
+                        <div class="col-4">
+                          <div class="form-check form-check-inline">
+                            <input
+                              id="ICE"
+                              class="form-check-input"
+                              type="checkbox"
+                              value="ICE"
+                              disabled
+                            />
+                            <label class="form-check-label" for="ICE"
+                              >ICE</label
+                            >
+                          </div>
+                        </div>
+                        <div class="col-4">
+                          <div class="form-check form-check-inline">
+                            <input
+                              id="IRBP"
+                              class="form-check-input"
+                              type="checkbox"
+                              value="IRBP"
+                              disabled
+                            />
+                            <label class="form-check-label" for="IRBP"
+                              >IRBP</label
                             >
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div class="col-2">
-                      <div class="input-container">
-                        <input
-                          id="subProd"
-                          name="subProd"
-                          type="text"
-                          disabled
-                        />
-                        <label for="subProd">Subtotal</label>
+                    <div class="col-4">
+                      <div class="row">
+                        <div class="col-8">
+                          <div class="input-container">
+                            <input
+                              id="subProd"
+                              name="subProd"
+                              type="text"
+                              disabled
+                            />
+                            <label for="subProd">Subtotal</label>
+                          </div>
+                        </div>
+                        <div class="col-4">
+                          <div>
+                            <input
+                              id="addProd"
+                              type="button"
+                              class="btn btn-success"
+                              value="Añadir"
+                            />
+                            <input
+                              id="cancelProd"
+                              type="button"
+                              class="btn btn-danger"
+                              value="Cancelar"
+                            />
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                    <div class="col-3">
-                      <input
-                        id="addProd"
-                        type="button"
-                        class="btn btn-success"
-                        value="Añadir"
-                      />
-                      <input
-                        id="cancelProd"
-                        type="button"
-                        class="btn btn-danger"
-                        value="Cancelar"
-                      />
                     </div>
                   </div>
                   <div class="row mt-4">
@@ -332,7 +367,9 @@
                             <th scope="col">Cantidad</th>
                             <th scope="col">Subtotal</th>
                             <th scope="col">Descuento</th>
+                            <th scope="col">ICE</th>
                             <th scope="col">IVA</th>
+                            <th scope="col">IRBP</th>
                             <th scope="col">P. Final</th>
                             <th scope="col">P. Unitario</th>
                             <th scope="col">P. Venta</th>
@@ -346,18 +383,33 @@
                 </div>
                 <div id="totalValues" class="totalData mt-4">
                   <div class="row">
-                    <div class="col-3">
-                      <div class="input-container">
-                        <input
-                          type="text"
-                          name="subTotal"
-                          id="subTotal"
-                          disabled
-                        />
-                        <label for="subTotal">SubTotal</label>
+                    <div class="col-4">
+                      <div class="row">
+                        <div class="col-6">
+                          <div class="input-container">
+                            <input
+                              type="text"
+                              name="subTotal"
+                              id="subTotal"
+                              disabled
+                            />
+                            <label for="subTotal">SubTotal sin IVA</label>
+                          </div>
+                        </div>
+                        <div class="col-6">
+                          <div class="input-container">
+                            <input
+                              type="text"
+                              name="subIva"
+                              id="subIva"
+                              disabled
+                            />
+                            <label for="subTotal">SubTotal con IVA</label>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <div class="col-3">
+                    <div class="col-2">
                       <div class="input-container">
                         <input
                           type="text"
@@ -368,18 +420,44 @@
                         <label for="DescTotal">Descuento</label>
                       </div>
                     </div>
-                    <div class="col-3">
-                      <div class="input-container">
-                        <input
-                          type="text"
-                          name="IvaTotal"
-                          id="IvaTotal"
-                          disabled
-                        />
-                        <label for="IvaTotal">IVA</label>
+                    <div class="col-4">
+                      <div class="row">
+                        <div class="col-4">
+                          <div class="input-container">
+                            <input
+                              type="text"
+                              name="IceTotal"
+                              id="IceTotal"
+                              disabled
+                            />
+                            <label for="IceTotal">ICE</label>
+                          </div>
+                        </div>
+                        <div class="col-4">
+                          <div class="input-container">
+                            <input
+                              type="text"
+                              name="IvaTotal"
+                              id="IvaTotal"
+                              disabled
+                            />
+                            <label for="IvaTotal">IVA</label>
+                          </div>
+                        </div>
+                        <div class="col-4">
+                          <div class="input-container">
+                            <input
+                              type="text"
+                              name="IrbpTotal"
+                              id="IrbpTotal"
+                              disabled
+                            />
+                            <label for="IrbpTotal">IRBP</label>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <div class="col-3">
+                    <div class="col-2">
                       <div class="input-container">
                         <input type="text" name="Total" id="Total" disabled />
                         <label for="Total">Total</label>
@@ -396,7 +474,11 @@
                     </div>
                     <div class="col-6 text-center">
                       <!-- <input type="submit" value="Guardar"> -->
-                      <button class="btn btn-success" type="submit">
+                      <button
+                        id="btnSavePurchase"
+                        class="btn btn-success"
+                        type="button"
+                      >
                         Guardar
                       </button>
                     </div>
@@ -632,13 +714,31 @@
                         />
                       </div>
                     </div>
-                    <div class="">
-                      <input
-                        type="checkbox"
-                        name="newIVAProd"
-                        id="newIVAProd"
-                      />
-                      <label class="mr-2" for="newIVAProd">IVA</label>
+                    <div class="row">
+                      <div class="col-4">
+                        <input
+                          type="checkbox"
+                          name="newIVAProd"
+                          id="newIVAProd"
+                        />
+                        <label class="mr-2" for="newIVAProd">IVA</label>
+                      </div>
+                      <div class="col-4">
+                        <input
+                          type="checkbox"
+                          name="newICEProd"
+                          id="newICEProd"
+                        />
+                        <label class="mr-2" for="newICEProd">ICE</label>
+                      </div>
+                      <div class="col-4">
+                        <input
+                          type="checkbox"
+                          name="newIRBPProd"
+                          id="newIRBPProd"
+                        />
+                        <label class="mr-2" for="newIRBPProd">IRBP</label>
+                      </div>
                     </div>
                   </div>
                 </div>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TIENDA CYBER MARKET ALEXIS</title>
+    <link rel="stylesheet" href="../../assets/css/bootstrap.css" />
+    <link
+      rel="stylesheet"
+      href="../../../node_modules/@fortawesome/fontawesome-free/css/all.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../../../node_modules/bootstrap-select/dist/css/bootstrap-select.css"
+    />
+    <link rel="stylesheet" href="../../assets/css/styles.css" />
+  </head>
+
+  <body>
+    <div class="cont-fluid">
+      <div class="topbar container-fluid">
+        <div class="row h-100">
+          <div class="d-flex open-menu text-center my-auto mx-4 h-100">
+            <div class="brand-logo h-100 d-flex">
+              <img
+                class="img-logo my-auto rounded"
+                src="../../assets/img/logo.jpg"
+                alt="LOGO EMPRESA"
+              />
+            </div>
+            <a href="#" class="my-auto">
+              <i class="icon menu-icon fas fa-bars"></i>
+            </a>
+          </div>
+          <div class="ml-auto top-options mr-4 my-auto">
+            <div class="top-option">
+              <a href="#" class="top-user active">
+                <i class="icon top-user-icon fas fa-user"></i>
+                <span class="top-user-text text-white">VENTAS</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12 text-center">
+            <span class="display-4">VENTAS</span>
+          </div>
+          <div class="col-12">
+            <div class="row">
+              <div class="col-6 border">
+                <div class="row">
+                  <div class="col-10">
+                    <div class="row">
+                      <div class="col-10">
+                        <div class="input-container">
+                          <input
+                            id="client"
+                            type="text"
+                            placeholder=""
+                          />
+                          <label for="client">Buscar cliente</label>
+                        </div>
+                        <ul id="clientsList" class="list-group w-100"></ul>
+                      </div>
+                      <div class="col-2">
+                        <button class="btn btn-success">
+                          <span>+</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-8">
+                    <div class="input-container">
+                      <input
+                        id="nameClient"
+                        type="text"
+                        placeholder=""
+                        disabled
+                      />
+                      <label for="nameClient">Cliente</label>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="input-container">
+                      <input
+                        id="idClient"
+                        type="text"
+                        placeholder=""
+                        disabled
+                      />
+                      <label for="idClient">Codigo</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6 border">
+                <div class="fac-container text-right">
+                  <span class="w-100 d-block text-center"> # Factura </span>
+                  <span class="w-100 d-block text-center"> 42222 </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="row">
+              <div class="col-6">
+                <div class="row">
+                  <div class="col-10">
+                    <div class="input-container">
+                      <input id="seachProduct" type="text" placeholder="" />
+                      <label for="searchProduct">Producto o Servicio</label>
+                    </div>
+                  </div>
+                  <div class="col-2">
+                    <button class="btn btn-success">
+                      <span>+</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="col-2 offset-1">
+                <div class="input-container">
+                  <input id="codeProd" type="text" placeholder="" />
+                  <label for="codeProd">Codigo</label>
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="input-container">
+                  <input id="brandProd" type="text" placeholder="" />
+                  <label for="brandProd">Marca o Entidad</label>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="row">
+                  <div class="col-8">
+                    <div class="input-container">
+                      <input id="nameProd" type="text" placeholder="" />
+                      <label for="nameProd">Nombre</label>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="input-container">
+                      <input id="stockProd" type="text" placeholder="" />
+                      <label for="stockProd">Stock</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-1">
+                <div class="input-container">
+                  <input id="measureProd" type="text" placeholder="" />
+                  <label for="measureProd">Medida</label>
+                </div>
+              </div>
+              <div class="col-2">
+                <div class="input-container">
+                  <input id="measureProd" type="text" placeholder="" />
+                  <label for="measureProd">Precio</label>
+                </div>
+              </div>
+              <div class="col-1">
+                <div class="input-container">
+                  <input id="measureProd" type="text" placeholder="" />
+                  <label for="measureProd">Adicionales</label>
+                </div>
+              </div>
+              <div class="col-2">
+                <div class="input-container">
+                  <input id="discountProd" type="text" placeholder="" />
+                  <label for="discountProd">Descuento</label>
+                </div>
+              </div>
+              <div class="productActions col-2">
+                <button class="btn btn-success w-100 my-1">Agregar</button>
+                <button class="btn btn-danger w-100">Cancelar</button>
+              </div>
+            </div>
+            <!-- !TABLE -->
+            <div class="row my-2">
+              <div class="table col-12">
+                <table
+                  id="productsTable"
+                  class="table-bordered table-striped w-100 text-center"
+                >
+                  <thead>
+                    <th>Codigo</th>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>P. Unitario</th>
+                    <th>Adicionales</th>
+                    <th>IVA</th>
+                    <th>Total</th>
+                    <th>Acciones</th>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+            <!-- !TOTALS -->
+            <div class="totals">
+              <div class="col-12">
+                <div class="row">
+                  <div class="col-2">
+                    <div class="input-container">
+                      <input id="subIvaTotal" type="text" placeholder="" />
+                      <label for="subIvaTotal">Subtotal 12%</label>
+                    </div>
+                  </div>
+                  <div class="col-2">
+                    <div class="input-container">
+                      <input id="subNoIvaTotal" type="text" placeholder="" />
+                      <label for="subNoIvaTotal">Subtotal 0%</label>
+                    </div>
+                  </div>
+                  <div class="col-2">
+                    <div class="input-container">
+                      <input id="subTotal" type="text" placeholder="" />
+                      <label for="subTotal">Subtotal</label>
+                    </div>
+                  </div>
+                  <div class="col-2">
+                    <div class="input-container">
+                      <input id="discountTotal" type="text" placeholder="" />
+                      <label for="discountTotal">Descuento</label>
+                    </div>
+                  </div>
+                  <div class="col-2">
+                    <div class="input-container">
+                      <input id="IvaTotal" type="text" placeholder="" />
+                      <label for="IVATotal">IVA</label>
+                    </div>
+                  </div>
+                  <div class="col-2">
+                    <div class="input-container">
+                      <input id="total" type="text" placeholder="" />
+                      <label for="total">Total a pagar</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- !BUTTONS -->
+            <div class="finalActions">
+              <div class="row">
+                <div class="col-4 offset-4 d-flex">
+                  <button id="btnCancel" class="btn btn-danger w-75 ml-auto">
+                    CANCELAR
+                  </button>
+                </div>
+                <div class="col-4 d-flex">
+                  <button id="btnSave" class="btn btn-success w-75 ml-auto">
+                    GUARDAR
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JS ADDED -->
+    <script src="./sale.js"></script>
+  </body>
+</html>

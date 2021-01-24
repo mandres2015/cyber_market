@@ -49,7 +49,7 @@
           </div>
           <div class="col-12">
             <div class="row">
-              <div class="col-6 border">
+              <div id="clientBlock" class="col-6 border">
                 <div class="row">
                   <div class="col-10">
                     <div class="row">
@@ -109,9 +109,10 @@
                 <div class="row">
                   <div class="col-10">
                     <div class="input-container">
-                      <input id="seachProduct" type="text" placeholder="" />
+                      <input id="searchProduct" type="text" placeholder="" />
                       <label for="searchProduct">Producto o Servicio</label>
                     </div>
+                    <ul id="productsList" class="list-group w-100"></ul>
                   </div>
                   <div class="col-2">
                     <button class="btn btn-success">
@@ -119,62 +120,6 @@
                     </button>
                   </div>
                 </div>
-              </div>
-              <div class="col-2 offset-1">
-                <div class="input-container">
-                  <input id="codeProd" type="text" placeholder="" />
-                  <label for="codeProd">Codigo</label>
-                </div>
-              </div>
-              <div class="col-3">
-                <div class="input-container">
-                  <input id="brandProd" type="text" placeholder="" />
-                  <label for="brandProd">Marca o Entidad</label>
-                </div>
-              </div>
-              <div class="col-4">
-                <div class="row">
-                  <div class="col-8">
-                    <div class="input-container">
-                      <input id="nameProd" type="text" placeholder="" />
-                      <label for="nameProd">Nombre</label>
-                    </div>
-                  </div>
-                  <div class="col-4">
-                    <div class="input-container">
-                      <input id="stockProd" type="text" placeholder="" />
-                      <label for="stockProd">Stock</label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-1">
-                <div class="input-container">
-                  <input id="measureProd" type="text" placeholder="" />
-                  <label for="measureProd">Medida</label>
-                </div>
-              </div>
-              <div class="col-2">
-                <div class="input-container">
-                  <input id="measureProd" type="text" placeholder="" />
-                  <label for="measureProd">Precio</label>
-                </div>
-              </div>
-              <div class="col-1">
-                <div class="input-container">
-                  <input id="measureProd" type="text" placeholder="" />
-                  <label for="measureProd">Adicionales</label>
-                </div>
-              </div>
-              <div class="col-2">
-                <div class="input-container">
-                  <input id="discountProd" type="text" placeholder="" />
-                  <label for="discountProd">Descuento</label>
-                </div>
-              </div>
-              <div class="productActions col-2">
-                <button class="btn btn-success w-100 my-1">Agregar</button>
-                <button class="btn btn-danger w-100">Cancelar</button>
               </div>
             </div>
             <!-- !TABLE -->
@@ -187,11 +132,13 @@
                   <thead>
                     <th>Codigo</th>
                     <th>Producto</th>
+                    <th>Stock</th>
                     <th>Cantidad</th>
                     <th>P. Unitario</th>
-                    <th>Adicionales</th>
                     <th>IVA</th>
-                    <th>Total</th>
+                    <th>Desc.</th>
+                    <th>% Desc.</th>
+                    <th>Recargos</th>
                     <th>Acciones</th>
                   </thead>
                   <tbody></tbody>
@@ -216,20 +163,20 @@
                   </div>
                   <div class="col-2">
                     <div class="input-container">
-                      <input id="subTotal" type="text" placeholder="" />
-                      <label for="subTotal">Subtotal</label>
-                    </div>
-                  </div>
-                  <div class="col-2">
-                    <div class="input-container">
                       <input id="discountTotal" type="text" placeholder="" />
                       <label for="discountTotal">Descuento</label>
                     </div>
                   </div>
                   <div class="col-2">
                     <div class="input-container">
-                      <input id="IvaTotal" type="text" placeholder="" />
-                      <label for="IVATotal">IVA</label>
+                      <input id="ivaTotal" type="text" placeholder="" />
+                      <label for="ivaTotal">IVA</label>
+                    </div>
+                  </div>
+                  <div class="col-2">
+                    <div class="input-container">
+                      <input id="charges" type="text" placeholder="" />
+                      <label for="charges">Recargos</label>
                     </div>
                   </div>
                   <div class="col-2">

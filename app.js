@@ -287,34 +287,29 @@ ipcMain.on("getProducts", (e, params) => {
     status: "",
     data: "",
   };
-  const client = new Client(credentials);
-  const query = `SELECT p.id, p.code, p.name, p.has_iva as iva, p.has_ice as ice, p.has_irbp as irbp, b.name as brand, m.name as measure 
-                    FROM product p 
-                    LEFT JOIN brand b ON b.id = p.brand_id 
-                    LEFT JOIN measure m ON m.id = p.measure_id
-                    WHERE CAST(p.id AS TEXT) LIKE UPPER($1)
-                    OR UPPER(p.code) LIKE UPPER($1)
-                    OR UPPER(p.name) LIKE UPPER($1)`;
-  client.connect();
+  const query = `SELECT p.id, p.code, p.name, p.price, p.stock, 
+                  p.charge, p.commission,
+                  p.has_iva as iva, p.has_ice as ice, p.has_irbp as irbp, 
+                  b.name as brand, m.name as measure, is_product
+                  FROM product p 
+                  LEFT JOIN brand b ON b.id = p.brand_id 
+                  LEFT JOIN measure m ON m.id = p.measure_id
+                  WHERE CAST(p.id AS TEXT) LIKE UPPER($1)
+                  OR UPPER(p.code) LIKE UPPER($1)
+                  OR UPPER(p.name) LIKE UPPER($1)`;
   params[0] = "%" + cleanParams(params) + "%";
-  client.query(query, params, (err, res) => {
-    if (err) {
-      response.status = -1;
-      win.webContents.send("sendProducts", err);
-    } else {
-      console.log(res.rows);
-      if (res.rows) {
-        response.status = 1;
+
+  pool 
+    .query(query, params)
+    .then((res) => {
+      response.status = 1;
         response.data = res.rows;
         console.log("POR ENVIAR");
-        win.webContents.send("sendProducts", response);
-        console.log("ENVIADO");
-      } else {
-        console.log("NO HAY NADA WEY");
-      }
-    }
-    client.end();
-  });
+        e.reply("sendProducts", response);
+    })
+    .catch((err) => {
+      console.log(err.stack);
+    }); 
 });
 
 ipcMain.on("saveProduct", (e, params) => {
@@ -529,12 +524,10 @@ ipcMain.on("getClients", (e, params) => {
   WHERE CAST(p.dni AS TEXT) LIKE UPPER($1)
   OR UPPER(CONCAT(p.first_name, p.last_name)) LIKE UPPER($1)
   OR UPPER(CONCAT(p.last_name, p.first_name)) LIKE UPPER($1)`;
-  console.log("Conectado");
   params[0] = "%" + cleanParams(params) + "%";
-  console.log("Conectado");
 
   // promise - checkout a client
-  pool
+  pool 
     .query(query, params)
     .then((res) => {
       response.status = 1;
@@ -545,5 +538,5 @@ ipcMain.on("getClients", (e, params) => {
     })
     .catch((err) => {
       console.log(err.stack);
-    });
+    }); 
 });

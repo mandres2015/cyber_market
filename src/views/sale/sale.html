@@ -5,14 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TIENDA CYBER MARKET ALEXIS</title>
     <link rel="stylesheet" href="../../assets/css/bootstrap.css" />
-    <link
-      rel="stylesheet"
-      href="../../../node_modules/@fortawesome/fontawesome-free/css/all.css"
-    />
-    <link
-      rel="stylesheet"
-      href="../../../node_modules/bootstrap-select/dist/css/bootstrap-select.css"
-    />
+    <link rel="stylesheet" href="../../../node_modules/@fortawesome/fontawesome-free/css/all.css" />
+    <link rel="stylesheet" href="../../../node_modules/bootstrap-select/dist/css/bootstrap-select.css" />
     <link rel="stylesheet" href="../../assets/css/styles.css" />
   </head>
 
@@ -22,11 +16,7 @@
         <div class="row h-100">
           <div class="d-flex open-menu text-center my-auto mx-4 h-100">
             <div class="brand-logo h-100 d-flex">
-              <img
-                class="img-logo my-auto rounded"
-                src="../../assets/img/logo.jpg"
-                alt="LOGO EMPRESA"
-              />
+              <img class="img-logo my-auto rounded" src="../../assets/img/logo.jpg" alt="LOGO EMPRESA" />
             </div>
             <a href="#" class="my-auto">
               <i class="icon menu-icon fas fa-bars"></i>
@@ -49,17 +39,13 @@
           </div>
           <div class="col-12">
             <div class="row">
-              <div id="clientBlock" class="col-6 border">
+              <div id="clientBlock" class="col-6">
                 <div class="row">
                   <div class="col-10">
                     <div class="row">
                       <div class="col-10">
                         <div class="input-container">
-                          <input
-                            id="client"
-                            type="text"
-                            placeholder=""
-                          />
+                          <input id="client" type="text" placeholder="" />
                           <label for="client">Buscar cliente</label>
                         </div>
                         <ul id="clientsList" class="list-group w-100"></ul>
@@ -73,29 +59,19 @@
                   </div>
                   <div class="col-8">
                     <div class="input-container">
-                      <input
-                        id="nameClient"
-                        type="text"
-                        placeholder=""
-                        disabled
-                      />
+                      <input id="nameClient" type="text" placeholder="" disabled />
                       <label for="nameClient">Cliente</label>
                     </div>
                   </div>
                   <div class="col-4">
                     <div class="input-container">
-                      <input
-                        id="idClient"
-                        type="text"
-                        placeholder=""
-                        disabled
-                      />
+                      <input id="idClient" type="text" placeholder="" disabled />
                       <label for="idClient">Codigo</label>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="col-6 border">
+              <div class="col-6">
                 <div class="fac-container text-right">
                   <span class="w-100 d-block text-center"> # Factura </span>
                   <span class="w-100 d-block text-center"> 42222 </span>
@@ -125,13 +101,11 @@
             <!-- !TABLE -->
             <div class="row my-2">
               <div class="table col-12">
-                <table
-                  id="productsTable"
-                  class="table-bordered table-striped w-100 text-center"
-                >
+                <table id="productsTable" class="table-bordered table-striped w-100 text-center">
                   <thead>
                     <th>Codigo</th>
                     <th>Producto</th>
+                    <th>Marca o Entidad</th>
                     <th>Stock</th>
                     <th>Cantidad</th>
                     <th>P. Unitario</th>
@@ -139,6 +113,7 @@
                     <th>Desc.</th>
                     <th>% Desc.</th>
                     <th>Recargos</th>
+                    <th>Total</th>
                     <th>Acciones</th>
                   </thead>
                   <tbody></tbody>
@@ -151,37 +126,37 @@
                 <div class="row">
                   <div class="col-2">
                     <div class="input-container">
-                      <input id="subIvaTotal" type="text" placeholder="" />
+                      <input id="subIvaTotal" type="text" placeholder="" disabled/>
                       <label for="subIvaTotal">Subtotal 12%</label>
                     </div>
                   </div>
                   <div class="col-2">
                     <div class="input-container">
-                      <input id="subNoIvaTotal" type="text" placeholder="" />
+                      <input id="subNoIvaTotal" type="text" placeholder="" disabled/>
                       <label for="subNoIvaTotal">Subtotal 0%</label>
                     </div>
                   </div>
                   <div class="col-2">
                     <div class="input-container">
-                      <input id="discountTotal" type="text" placeholder="" />
+                      <input id="discountTotal" type="text" placeholder="" disabled/>
                       <label for="discountTotal">Descuento</label>
                     </div>
                   </div>
                   <div class="col-2">
                     <div class="input-container">
-                      <input id="ivaTotal" type="text" placeholder="" />
+                      <input id="ivaTotal" type="text" placeholder="" disabled/>
                       <label for="ivaTotal">IVA</label>
                     </div>
                   </div>
                   <div class="col-2">
                     <div class="input-container">
-                      <input id="charges" type="text" placeholder="" />
+                      <input id="charges" type="text" placeholder="" disabled/>
                       <label for="charges">Recargos</label>
                     </div>
                   </div>
                   <div class="col-2">
                     <div class="input-container">
-                      <input id="total" type="text" placeholder="" />
+                      <input id="total" type="text" placeholder="" disabled/>
                       <label for="total">Total a pagar</label>
                     </div>
                   </div>
@@ -191,19 +166,67 @@
             <!-- !BUTTONS -->
             <div class="finalActions">
               <div class="row">
-                <div class="col-4 offset-4 d-flex">
-                  <button id="btnCancel" class="btn btn-danger w-75 ml-auto">
-                    CANCELAR
-                  </button>
+                <div class="col-4">
+                  <label class="d-block" for="observations">Observaciones</label>
+                  <textarea name="observations" id="observations" cols="30" rows="5"></textarea>
                 </div>
-                <div class="col-4 d-flex">
-                  <button id="btnSave" class="btn btn-success w-75 ml-auto">
-                    GUARDAR
-                  </button>
+                <div class="col-4">
+                  <button id="btnCancel" class="btn btn-danger w-75 ml-auto">CANCELAR</button>
+                </div>
+                <div class="col-4">
+                  <button id="btnSave" class="btn btn-success w-75 ml-auto" onclick="openModalPayment()">GUARDAR</button>
                 </div>
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- * MODAL METODO DE PAGO -->
+    <div class="modal fade" id="modalPaymentMethod" tabindex="-1" role="dialog" aria-labelledby="modalPaymentMethodLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header text-center">
+            <h5 class="modal-title">METODO DE PAGO</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form action="">
+            <div class="modal-body">
+              <div class="container">
+                <div id="divPayMethod" class="row text-center">
+                  <div class="col-6 mx-auto my-4">
+                    <button id="btnCash" type="button" class="btn btn-primary" onclick="cashOptions(this)">CONTADO</button>
+                  </div>
+                  <div class="col-6 mx-auto my-4">
+                    <button id="btnCredit" type="button" class="btn btn-primary" onclick="saveSale(this)">CREDITO</button>
+                  </div>
+                </div>
+                <div id="divAmountTurned" class="row text-center" hidden>
+                  <div class="col-6 text-center mx-auto">
+                    <div class="input-container mx-auto">
+                      <input id="totalSale" class="hover-focus" type="text" placeholder="" disabled/>
+                      <label for="totalSale">TOTAL DE LA COMPRA</label>
+                    </div>
+                    <div class="input-container mx-auto">
+                      <input id="amount" class="hover-focus" type="text" placeholder="" />
+                      <label for="amount">VALOR QUE PAGA</label>
+                    </div>
+                    <div class="input-container my-4">
+                      <input class="hover-focus" id="turned" type="text" placeholder="" disabled/>
+                      <label for="turned">VUELTO</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="footerModalPayment" class="modal-footer" hidden>
+              <button type="button" class="btn btn-dark mr-auto" data-dismiss="modal">Cerrar</button>
+              <button id="btnSaveSale" type="button" class="btn btn-success ml-auto" onclick="saveSale(this)">Guardar</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>

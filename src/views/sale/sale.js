@@ -263,7 +263,11 @@ function fillProduct(e, product) {
           input = document.createElement("input");
           input.setAttribute("type", "text");
           input.className = "input-table";
-          input.value = product.price;
+          if (product.iva) {
+            input.value = (product.price / ((IVA + 100) / 100)).toFixed(5);
+          } else {
+            input.value = product.price;
+          }
           if (product.is_product) {
             input.setAttribute("disabled", true);
           }
@@ -345,12 +349,22 @@ function fillProduct(e, product) {
 
 function calculateTotalProduct(row) {
   const actualRow = document.getElementById("productsTable").getElementsByTagName("tbody")[0].rows[row - 1];
-  actualRow.cells[columnsTable.colTotal].innerHTML = (
-    Number(actualRow.cells[columnsTable.colUnitPrice].getElementsByTagName("input")[0].value) *
-      Number(actualRow.cells[columnsTable.colQty].getElementsByTagName("input")[0].value) -
-    Number(actualRow.cells[columnsTable.colDesc].getElementsByTagName("input")[0].value) +
-    Number(actualRow.cells[columnsTable.colAdds].getElementsByTagName("input")[0].value)
-  ).toFixed(2);
+  if (actualRow.cells[columnsTable.colIva].getElementsByTagName("input")[0].checked) {
+    actualRow.cells[columnsTable.colTotal].innerHTML = (
+      Number(actualRow.cells[columnsTable.colUnitPrice].getElementsByTagName("input")[0].value) *
+        ((IVA + 100) / 100) *
+        Number(actualRow.cells[columnsTable.colQty].getElementsByTagName("input")[0].value) -
+      Number(actualRow.cells[columnsTable.colDesc].getElementsByTagName("input")[0].value) +
+      Number(actualRow.cells[columnsTable.colAdds].getElementsByTagName("input")[0].value)
+    ).toFixed(2);
+  } else {
+    actualRow.cells[columnsTable.colTotal].innerHTML = (
+      Number(actualRow.cells[columnsTable.colUnitPrice].getElementsByTagName("input")[0].value) *
+        Number(actualRow.cells[columnsTable.colQty].getElementsByTagName("input")[0].value) -
+      Number(actualRow.cells[columnsTable.colDesc].getElementsByTagName("input")[0].value) +
+      Number(actualRow.cells[columnsTable.colAdds].getElementsByTagName("input")[0].value)
+    ).toFixed(2);
+  }
 }
 
 function calculateDiscount(element) {
@@ -358,19 +372,11 @@ function calculateDiscount(element) {
   const row = element.target.parentElement.parentElement.rowIndex;
   const actualRow = document.getElementById("productsTable").getElementsByTagName("tbody")[0].rows[row - 1];
   let desc = 0;
-  if (actualRow.cells[columnsTable.colIva].getElementsByTagName("input")[0].checked) {
-    desc =
-      ((Number(actualRow.cells[columnsTable.colUnitPrice].getElementsByTagName("input")[0].value) / ((IVA + 100) / 100)) *
-        Number(actualRow.cells[columnsTable.colQty].getElementsByTagName("input")[0].value) *
-        Number(actualRow.cells[columnsTable.colDescPerc].getElementsByTagName("input")[0].value)) /
-      100;
-  } else {
-    desc =
-      (Number(actualRow.cells[columnsTable.colUnitPrice].getElementsByTagName("input")[0].value) *
-        Number(actualRow.cells[columnsTable.colQty].getElementsByTagName("input")[0].value) *
-        Number(actualRow.cells[columnsTable.colDescPerc].getElementsByTagName("input")[0].value)) /
-      100;
-  }
+  desc =
+    (Number(actualRow.cells[columnsTable.colUnitPrice].getElementsByTagName("input")[0].value) *
+      Number(actualRow.cells[columnsTable.colQty].getElementsByTagName("input")[0].value) *
+      Number(actualRow.cells[columnsTable.colDescPerc].getElementsByTagName("input")[0].value)) /
+    100;
   actualRow.cells[columnsTable.colDesc].getElementsByTagName("input")[0].value = desc.toFixed(5);
   actualRow.cells[columnsTable.colTotal].innerHTML = (
     Number(actualRow.cells[columnsTable.colUnitPrice].getElementsByTagName("input")[0].value) *
@@ -384,19 +390,11 @@ function calculatePercentageDiscount(element) {
   const row = element.target.parentElement.parentElement.rowIndex;
   const actualRow = document.getElementById("productsTable").getElementsByTagName("tbody")[0].rows[row - 1];
   let desc = 0;
-  if (actualRow.cells[columnsTable.colIva].getElementsByTagName("input")[0].checked) {
-    desc =
-      (Number(actualRow.cells[columnsTable.colDesc].getElementsByTagName("input")[0].value) /
-        ((Number(actualRow.cells[columnsTable.colUnitPrice].getElementsByTagName("input")[0].value) / ((IVA + 100) / 100)) *
-          Number(actualRow.cells[columnsTable.colQty].getElementsByTagName("input")[0].value))) *
-      100;
-  } else {
-    desc =
-      (Number(actualRow.cells[columnsTable.colDesc].getElementsByTagName("input")[0].value) /
-        (Number(actualRow.cells[columnsTable.colUnitPrice].getElementsByTagName("input")[0].value) *
-          Number(actualRow.cells[columnsTable.colQty].getElementsByTagName("input")[0].value))) *
-      100;
-  }
+  desc =
+    (Number(actualRow.cells[columnsTable.colDesc].getElementsByTagName("input")[0].value) /
+      (Number(actualRow.cells[columnsTable.colUnitPrice].getElementsByTagName("input")[0].value) *
+        Number(actualRow.cells[columnsTable.colQty].getElementsByTagName("input")[0].value))) *
+    100;
   actualRow.cells[columnsTable.colDescPerc].getElementsByTagName("input")[0].value = desc.toFixed(5);
   actualRow.cells[columnsTable.colTotal].innerHTML = (
     Number(actualRow.cells[columnsTable.colUnitPrice].getElementsByTagName("input")[0].value) *
@@ -430,7 +428,6 @@ function calculateTotals() {
     chargesValue += Number(charges);
     // *Calcula el subtotal 12%
     if (productHasIva) {
-      price /= (100 + IVA) / 100;
       subIvaTotalValue += qty * price;
       discountIvaValue += discount;
     }
@@ -467,6 +464,8 @@ function deleteProduct(element) {
   tbody.deleteRow(row - 1);
   if (tbody.rows.length < 1) {
     tableEmpty();
+  } else {
+    calculateTotals();
   }
 }
 
@@ -506,24 +505,6 @@ function calculateTurned() {
 
 // !GUARDAR VENTA
 function saveSale(e) {
-  const params = {
-    clientId: "",
-    subtotal: "",
-    discuont: "",
-    iva: "",
-    charges: "",
-    total: "",
-    products: [
-      {
-        id: "",
-        qty: "",
-        price: "",
-        discount: "",
-        charges: "",
-      },
-    ],
-  };
-
   const client = document.getElementById("idClient");
   const subIvaTotal = document.getElementById("subIvaTotal");
   const subNoIvaTotal = document.getElementById("subNoIvaTotal");
@@ -546,5 +527,26 @@ function saveSale(e) {
     products.push(prod);
   }
 
-  console.log(products);
+  const subtotal = (Number(subIvaTotal.value) + Number(subNoIvaTotal.value)).toFixed(5);
+
+  // FALTA LA FECHA, EL ID DEL USUARIO Y EL METODO DE PAGO
+  const params = {
+    clientId: client.value,
+    subtotal: subtotal,
+    discount: discountTotal.value,
+    iva: ivaTotal.value,
+    charges: charges.value,
+    total: total.value,
+    products: products,
+  };
+
+  ipcRenderer.send("saveSale", params);
 }
+
+ipcRenderer.on("saleSaved", (e, response) => {
+  console.log(e);
+  console.log(response);
+  alert("GUARDADO");
+});
+
+// YA ESTA CASI TODO HECHO, SOLO FALTA GUARDAR LA TRANSACCION Y AGREGAR CLIENTE Y PRODUCTO O SERVICIO y VALIDACIONES

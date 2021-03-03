@@ -181,34 +181,20 @@ ipcMain.on("saveProvider", (e, params) => {
       client.query("BEGIN", (err) => {
         // INGRESA SI FALLA EN BEGIN
         if (err) {
-          console.log(
-            "Ocurrio un problema al empezar la transaccion de insertar proveedor",
-            err
-          );
+          console.log("Ocurrio un problema al empezar la transaccion de insertar proveedor", err);
           // return done(true); //pass non-falsy value to done to kill client & remove from pool
           client.end();
         }
         const queryPerson = `INSERT INTO person(dni, first_name, last_name, address, phone, email, created_at)
                                     VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id`;
-        const paramsPerson = [
-          params.dni,
-          params.name,
-          params.lName,
-          params.address,
-          params.phone,
-          params.email,
-          params.date,
-        ];
+        const paramsPerson = [params.dni, params.name, params.lName, params.address, params.phone, params.email, params.date];
         client.query(queryPerson, paramsPerson, (err, resPerson) => {
           // INGRESA SI HAY UN ERROR AL INSERTAR
           if (err) {
             console.log("No se pudo insertar el proveedor", err);
             return client.query("ROLLBACK", function (err) {
               if (err) {
-                consoles.log(
-                  "No se ha pudo hacer el ROLLBACK de esta transaccion",
-                  err
-                );
+                consoles.log("No se ha pudo hacer el ROLLBACK de esta transaccion", err);
               }
               response.status = -1;
               response.data = err;
@@ -223,21 +209,14 @@ ipcMain.on("saveProvider", (e, params) => {
             // INSERTA EN LA TABLA PROVEEDOR
             const queryProvider = `INSERT INTO provider(id, tradename, added_at) 
                                                 VALUES($1, $2, $3)`;
-            const paramsProvider = [
-              resPerson.rows[0].id,
-              params.tradename,
-              params.date,
-            ];
+            const paramsProvider = [resPerson.rows[0].id, params.tradename, params.date];
             client.query(queryProvider, paramsProvider, (err, resProvider) => {
               // INGRESA SI HAY UN ERROR AL INSERTAR
               if (err) {
                 console.log("No se pudo insertar el proveedor", err);
                 return client.query("ROLLBACK", function (err) {
                   if (err) {
-                    console.log(
-                      "No se ha pudo hacer el ROLLBACK de esta transaccion",
-                      err
-                    );
+                    console.log("No se ha pudo hacer el ROLLBACK de esta transaccion", err);
                   }
                   response.status = -1;
                   response.data = err;
@@ -257,10 +236,7 @@ ipcMain.on("saveProvider", (e, params) => {
               // REALIZA UN COMMIT PARA GUARDAR LOS CAMBIOS
               client.query("COMMIT", function (err) {
                 if (err) {
-                  console.log(
-                    "No se ha pudo hacer el COMMIT de esta transaccion",
-                    err
-                  );
+                  console.log("No se ha pudo hacer el COMMIT de esta transaccion", err);
                   response.status = -1;
                   response.data = err;
                 }
@@ -299,17 +275,17 @@ ipcMain.on("getProducts", (e, params) => {
                   OR UPPER(p.name) LIKE UPPER($1)`;
   params[0] = "%" + cleanParams(params) + "%";
 
-  pool 
+  pool
     .query(query, params)
     .then((res) => {
       response.status = 1;
-        response.data = res.rows;
-        console.log("POR ENVIAR");
-        e.reply("sendProducts", response);
+      response.data = res.rows;
+      console.log("POR ENVIAR");
+      e.reply("sendProducts", response);
     })
     .catch((err) => {
       console.log(err.stack);
-    }); 
+    });
 });
 
 ipcMain.on("saveProduct", (e, params) => {
@@ -325,16 +301,7 @@ ipcMain.on("saveProduct", (e, params) => {
   client.connect();
   client.query(
     query,
-    [
-      params.code,
-      params.name,
-      params.hasIVA,
-      params.hasICE,
-      params.hasIRBP,
-      params.measure,
-      params.brand,
-      params.category,
-    ],
+    [params.code, params.name, params.hasIVA, params.hasICE, params.hasIRBP, params.measure, params.brand, params.category],
     (err, res) => {
       if (err) {
         response.status = -1;
@@ -493,10 +460,7 @@ is_Object = function (a) {
 function cleanParams(params) {
   if (is_Object(params)) {
     for (const object in params) {
-      if (
-        typeof params[object] === "string" ||
-        params[object] instanceof String
-      ) {
+      if (typeof params[object] === "string" || params[object] instanceof String) {
         params[object] = params[object].toUpperCase();
         console.log(object);
       }
@@ -527,7 +491,7 @@ ipcMain.on("getClients", (e, params) => {
   params[0] = "%" + cleanParams(params) + "%";
 
   // promise - checkout a client
-  pool 
+  pool
     .query(query, params)
     .then((res) => {
       response.status = 1;
@@ -538,5 +502,33 @@ ipcMain.on("getClients", (e, params) => {
     })
     .catch((err) => {
       console.log(err.stack);
-    }); 
+    });
+});
+
+ipcMain.on("saveSale", (e, params) => {
+  let response = {
+    status: "",
+    data: "",
+  };
+
+  const querySale = `INSERT INTO sale(
+      client_id, user_id, sale_date, iva, discount, subtotal, charge, total, pay_method_id)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);`;
+
+  params = cleanParams(params);
+
+  const client = new Client(credentials);
+  client.connect();
+  client
+    .query(querySale, [params.clientId, 1, new Date(), params.iva, params.discount, params.subtotal, params.charges, params.total, 1])
+    .then((res) => {
+      response.status = 1;
+      response.data = res.rows;
+      // client.end()
+      console.log("Response\n");
+      console.log(res);
+      e.reply("saleSaved", response);
+    })
+    .catch((e) => console.error(e.stack))
+    .finally(() => client.end());
 });
